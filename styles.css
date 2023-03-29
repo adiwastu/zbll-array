@@ -2,3 +2,15 @@ table, th, td {
     border: 1px solid black;
     border-collapse: collapse;
   }
+
+body {
+    font-family:'Lucida Sans Unicode', 'Lucida Grande', sans-serif;
+    font-size: small
+}
+.roofpig {
+    width:100px;
+    height:116px;
+    margin: 4px;
+    float:left;
+    background-color: #cc9;
+}
