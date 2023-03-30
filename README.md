@@ -6,3 +6,7 @@ a better way to display 470+ algs on a desktop monitor compared to the usual scr
 actually make the "Swap Sets" option working
 
 add legacy algdb numbering to accomodate zbll users who are not familiar with BH recognition system.
+
+add a way to feed txt file of 72 algs separated by new lines, ordered by algdb order (?) and automatically maps the thing
+
+visual polishing for consistency: gen a few pics with UFR being white-green-red (credit: ore)
