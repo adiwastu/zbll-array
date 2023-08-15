@@ -4,6 +4,9 @@
     <label for="swap-select" style="color: blue; font-weight: bold; font-size: 25px;">Swap sets👉</label>
 
     <audio id="chess_audio" src="chess_sound.mp3"></audio>
+    <button id="copy-button" style="font-size: 18px;">Copy</button>
+    <div id="copied-message" style="font-size: 18px; color: green; display: none;">Copied!</div>
+
 
     <select id="set-selector" style="color: rgb(0, 0, 0); font-weight: bold; font-family: Arial, Helvetica, sans-serif; font-size: 18px;">
       <option value="U">U</option>
@@ -382,6 +385,25 @@
           this.classList.add("active");
         });
       }
+
+      // Add copy functionality
+      const copyButton = document.getElementById("copy-button");
+      const copiedMessage = document.getElementById("copied-message");
+      
+      copyButton.addEventListener("click", function() {
+        const textToCopy = textDisplay.innerHTML;
+        const tempInput = document.createElement("textarea");
+        tempInput.value = textToCopy;
+        document.body.appendChild(tempInput);
+        tempInput.select();
+        document.execCommand("copy");
+        document.body.removeChild(tempInput);
+        
+        copiedMessage.style.display = "block";
+        setTimeout(function() {
+          copiedMessage.style.display = "none";
+        }, 1500);
+      });
     </script>
     <style>
       .active {
