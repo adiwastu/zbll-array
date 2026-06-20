@@ -450,7 +450,6 @@
     }
 
     setSelector.addEventListener("change", swapSets);
-    swapSets();
 
 
     /* ============================================================
@@ -494,6 +493,8 @@
       copiedMessage.style.display = "block";
       setTimeout(function() { copiedMessage.style.display = "none"; }, 1500);
     });
+
+    swapSets();
 
   </script>
 </body>
