@@ -1,424 +1,347 @@
 <!DOCTYPE html>
 <html>
-  <body>
-    <label for="swap-select" style="color: blue; font-weight: bold; font-size: 25px;">Swap sets👉</label>
+<head>
+  <meta charset="UTF-8">
+  <title>COLL Trainer</title>
+  <style>
+    body {
+      font-family: Arial, Helvetica, sans-serif;
+    }
 
-    <audio id="chess_audio" src="chess_sound.mp3"></audio>
-    <button id="copy-button" style="font-size: 18px;">Copy currently displayed alg</button>
-    <div id="copied-message" style="font-size: 18px; color: green; display: none;">Alg copied!</div>
+    .active {
+      background-color: rgb(0, 0, 255);
+    }
 
+    select {
+      height: 30px;
+    }
 
-    <select id="set-selector" style="color: rgb(0, 0, 0); font-weight: bold; font-family: Arial, Helvetica, sans-serif; font-size: 18px;">
-      <option value="U">U</option>
-      <option value="T">T</option>
-      <!-- <option value="L">L</option>
-      <option value="Pi">Pi</option>
-      <option value="H">H</option>
-      <option value="S">S</option>
-      <option value="A">A</option> -->
-      
-    </select>
-    <table>
-      <tr>
-        <td></td>
-        <th scope="col">
-          <img src=".\bh_solved.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_h.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_z.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_falseh.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_horizontaladj.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_horizontalopp.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_verticaladj.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_verticalopp.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_horizontalzadj.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_horizontalzopp.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_verticalzadj.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <th scope="col">
-          <img src=".\bh_verticalzopp.png" alt="" border=0 height=80 width=80></img>
-        </th>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-2gll.png" alt="" border=0 height=80 width=80></img>
-        </th>
+    /* Placeholder shown when an image file is missing */
+    .img-placeholder {
+      width: 80px;
+      height: 80px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      background-color: #fff3cd;
+      border: 2px dashed #f0ad4e;
+      border-radius: 6px;
+      box-sizing: border-box;
+      text-align: center;
+      gap: 4px;
+    }
 
-        <!------------------------------------------------------- 2GLL ---------------------------------------------------------------->
-        <!------------------------------------------------------- 2GLL ---------------------------------------------------------------->
-        <!-- BH order:solved, H, Z, false H, (-) bar adj, (-) bar opp, (|) bar adj, (|) bar opp, (-) z adj, (-) z opp, (|) z adj, (|) z opp------>
+    .img-placeholder .placeholder-icon {
+      font-size: 20px;
+    }
 
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="R U R' U R U' R' U' R U' R' U2 R U' R' U2 R U R'" data-gen="&ltRU&gt" style="height:80px;width:80px; color: blue;">👀 </button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="R U R' U' R' U R U R U' R' U R' U R U2 R' U' R" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="R' U' R U' R' U2 R2 U R' U R U2 R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U2) R U R' U R U2 R2 U' R U' R' U2 R " data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U') R U R' U' R U' R' U2 R U' R' U2 R U R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U2) R U R' U R U2 R' U R U2 R' U' R U' R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U) R' U2 R U R' U R U R' U' R U' R' U2 R" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U) R U2 R2 U' R2 U' R' U R' U' R U R' U R" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U) R U2 R' U' R U' R' U' R U R' U R U2 R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="R' U' R U' R U2 R2 U' R2 U' R2 U R" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U2) R U R' U R' U2 R2 U R2 U R2 U' R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-legacy-numbering="U1" data-alg="(U) R' U2 R2 U R2 U R U' R U R' U' R U' R'" data-gen="&ltRU&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-diag.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <!-- DIAG -->
-        <td>
-          <button class="editbtn" data-alg="(U2) L' R U R' U R U R' U2 L R U' R'" data-gen="&ltRUL&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R U' R' U' R U R D R' U R D' R2" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') f U R U' R' f' r' U r2 U' r2' U' r2 U r'" data-gen="&ltRrUF&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R D' R2 U2 R U' R' U' R2 D R'" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R D' R2 U R U R' U2 R2 D R'" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R U2' R2' F R F' U' S' R U' R' S" data-gen="&ltRUFS&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R' D' R U' R' D R2 U2 R' U R U R'" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R' U' F R' F' R2 S' R' U R S" data-gen="&ltRUFS&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="F U R U2 R' U R U R' U R U2 R' U R U R' F'" data-gen="&ltRUF&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') r U' r2 U r2 U r2 U' r f R U R' U' f'" data-gen="&ltRrUf&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' F' U' F U F R S R' F' R S'" data-gen="&ltRUFS&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="S' R' U' R S R' U F' U' F U R" data-gen="&ltRUFS&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-x.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <td>
-          <button class="editbtn" data-alg="(U2) r U2 r' U2 L' U2 r U2 r' U2 L" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' D' U2 R' D R U2 R' D' R D R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R U' R2 F R U R U' R2 F' R U' F' U F" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' U' R f R' U R U' R U R' U' f'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R U R' U R U' R' U2 R' D' R U2 R' D R2 U' R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R U' R' U' R U' R' U R' D' R U R' D R2 U R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' U2 R U R D R' U' R D' R' U R' U R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R U R' U' R' F2 r2 U' R' U' R U R r2 F2" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R U R' U R U R' U2 R U' R2 D' R U' R' D R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' U' R F U' R' U' R U F' U R' U R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R F U' R' U' R U2 R' U' R F' R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) S R U2 R' F R' F' R U2 R' F R f'" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-bars.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <td>
-          <button class="editbtn" data-alg="R' F R U' R' U' R U R' F' R U R' U' R' F R F' R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R2 F R U R U' R' F' R U' R2' D' R U R' D R2" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R F U R' U' R F' R' U' R' F R f' R U R' S" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') F' U' r' F2 r U' r' F' r2 U R' U' r' F R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') F2 R U' R' U' R U R' F' R U R' U' R' F R F2" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="S R' F2 R S' R' U' F U r U2' R U' r' F" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="r2 F2 r U2 r U' L' U R' U R U' L" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' U' r y R' F R2 f' U S R' F R2 f'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R' U' R F R2' D' R U R' D R2 U' F'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="S' R' F' U2 F R U2 R' F R' F' R2 S" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') r U R' U' r' F R U R' U' R F' R' U R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') r U R' U' r' F R2 U' R' U' R U2 R' U' F'" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-slash.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <td>
-          <button class="editbtn" data-alg="(U2) R2 D R' U2 R D' R' U2 R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="r U R' U R' D' R U R' D R U r' F R F'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R' D' r U2 r' D R U2 R U' R' U' R U' R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="back sexy front sexy R' U F R horrid F' (harrison notation)" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R U R' U R U' R' U F' R U2 R' U2 R' F R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U) R U R' U R U' R' U' R' F R U R U' R' F'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R2 D r' U2 r D' R' U2 R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U2) R' U' F' R U R2 U' R' F R U R2 U2 R' U2 R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R F2 U' R2 U' R U2 R' U' R U' R U F2 R'" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U) R U R' U R U' R' U R U' R' U' L' U R U' R' L" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R U' R' U' R U2 R' U' R' D' R U2 R' D R" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R U2 R D R' U2 R D' R' U2 R' U' R U' R'" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-      <tr>
-        <th scope="row">
-          <img src=".\u-coll-backslash.png" alt="" border=0 height=80 width=80></img>
-        </th>
-        <td>
-          <button class="editbtn" data-alg="R2 D' r U2 r' D R U2 R" data-gen="&ltRrUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="F U R U' R D R' U' R D' R2 U R U R' F'" data-gen="&ltRUFD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R' U2 R' D' R U2 R' D R U2 R U R' U R" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') R2' F' R U2 R U2 R' F U' R U R' U' R" data-gen="&ltRUF&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="r B r' U r B2 r2 F R F' r U R'" data-gen="&ltRrUBF&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' F R U' R' F R U R' F R U' R' F2 R F U F'" data-gen="&ltRUFy&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U) R2 D' R U' R' D R2 U' R' U2 R" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R D r' U2 r D' R' U2 R' U R U R' U R" data-gen="&ltRrUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R' F' r U2 R' D R U' R' D' R2 U' r' F" data-gen="&ltRrUDF&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="(U') L U2 R' F R U' R U R' U F' R U2 R' L'" data-gen="&ltRUFL&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R2 D' R U2 R' D R U2 R" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-        <td>
-          <button class="editbtn" data-alg="R D R' U2 R D' R' U R' U R U' R' U' R U R' U' R" data-gen="&ltRUD&gt" style="height:80px;width:80px;">👀</button>
-        </td>
-      </tr>
-    </table>
-<script src="http://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
-<script src="https://adiwastu.github.io/zbll-array/roofpig_and_three.min.js"></script>
-    <script>
-      var audio = document.getElementById("chess_audio");
-      const setSelector = document.getElementById("set-selector");
-      setSelector.addEventListener("change", swapSets);
+    .img-placeholder .placeholder-label {
+      font-size: 9px;
+      font-weight: bold;
+      color: #856404;
+      word-break: break-all;
+      padding: 0 3px;
+      line-height: 1.2;
+    }
 
-      function swapSets() {
-        const currentSet = document.getElementById("current-set");
-        const otherSet = document.getElementById("other-set");
-        if (setSelector.value === "U")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "Pi")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "T")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "L")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "S")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "A")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-        else if (setSelector.value === "H")
-        {
-          const temp = currentSet.innerHTML;
-          currentSet.innerHTML = otherSet.innerHTML;
-          otherSet.innerHTML = temp;
-        }
-      }
-      var buttons = document.getElementsByClassName("editbtn");
-      var textDisplay = document.createElement("div");
-      textDisplay.style = "font-size: 30px; font-weight: bold; position: fixed; color: blue;"
-      textDisplay.id = "text-display";
-      textDisplay.innerHTML = "Click 👀 to 👀 the algorithm.";
-      document.body.appendChild(textDisplay);
-      for (var i = 0; i < buttons.length; i++) {
-        buttons[i].addEventListener("click", function() {
-          audio.play();
-          // textDisplay.innerHTML = this.getAttribute("data-alg");
-          var alg = this.getAttribute("data-alg");
-          var gen = this.getAttribute("data-gen");
-          textDisplay.innerHTML = alg;
-          // remove the 'active' class from all buttons
-          for (var j = 0; j < buttons.length; j++) {
-            buttons[j].classList.remove("active");
-          }
-          // add the 'active' class to the last clicked button
-          this.classList.add("active");
-        });
-      }
+    table th img,
+    table th .img-placeholder {
+      display: block;
+    }
+  </style>
+</head>
+<body>
 
-      // Add copy functionality
-      const copyButton = document.getElementById("copy-button");
-      const copiedMessage = document.getElementById("copied-message");
-      
-      copyButton.addEventListener("click", function() {
-        const textToCopy = textDisplay.innerHTML;
-        const tempInput = document.createElement("textarea");
-        tempInput.value = textToCopy;
-        document.body.appendChild(tempInput);
-        tempInput.select();
-        document.execCommand("copy");
-        document.body.removeChild(tempInput);
-        
-        copiedMessage.style.display = "block";
-        setTimeout(function() {
-          copiedMessage.style.display = "none";
-        }, 1500);
+  <label for="set-selector" style="color: blue; font-weight: bold; font-size: 25px;">Swap sets 👉</label>
+
+  <select id="set-selector" style="color: rgb(0,0,0); font-weight: bold; font-family: Arial; font-size: 18px;">
+    <option value="u">U</option>
+    <option value="t">T</option>
+    <!-- Uncomment as you add image sets:
+    <option value="l">L</option>
+    <option value="pi">Pi</option>
+    <option value="h">H</option>
+    <option value="s">S</option>
+    <option value="a">A</option>
+    -->
+  </select>
+
+  <audio id="chess_audio" src="chess_sound.mp3"></audio>
+  <button id="copy-button" style="font-size: 18px;">Copy currently displayed alg</button>
+  <div id="copied-message" style="font-size: 18px; color: green; display: none;">Alg copied!</div>
+
+  <table>
+    <tr>
+      <td></td>
+      <th scope="col"><img src=".\bh_solved.png"         alt="BH solved"         border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_h.png"              alt="BH H"              border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_z.png"              alt="BH Z"              border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_falseh.png"         alt="BH false H"        border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_horizontaladj.png"  alt="BH horiz adj"      border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_horizontalopp.png"  alt="BH horiz opp"      border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_verticaladj.png"    alt="BH vert adj"       border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_verticalopp.png"    alt="BH vert opp"       border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_horizontalzadj.png" alt="BH horiz Z adj"    border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_horizontalzopp.png" alt="BH horiz Z opp"    border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_verticalzadj.png"   alt="BH vert Z adj"     border=0 height=80 width=80></th>
+      <th scope="col"><img src=".\bh_verticalzopp.png"   alt="BH vert Z opp"     border=0 height=80 width=80></th>
+    </tr>
+
+    <!-- Row: 2GLL -->
+    <tr>
+      <th scope="row" data-case="2gll">
+        <img src=".\u-coll-2gll.png" alt="2GLL" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="R U R' U R U' R' U' R U' R' U2 R U' R' U2 R U R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;color:blue;">👀</button></td>
+      <td><button class="editbtn" data-alg="R U R' U' R' U R U R U' R' U R' U R U2 R' U' R" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U' R U' R' U2 R2 U R' U R U2 R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R U R' U R U2 R2 U' R U' R' U2 R" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R U R' U' R U' R' U2 R U' R' U2 R U R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R U R' U R U2 R' U R U2 R' U' R U' R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R' U2 R U R' U R U R' U' R U' R' U2 R" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R U2 R2 U' R2 U' R' U R' U' R U R' U R" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R U2 R' U' R U' R' U' R U R' U R U2 R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U' R U' R U2 R2 U' R2 U' R2 U R" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R U R' U R' U2 R2 U R2 U R2 U' R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R' U2 R2 U R2 U R U' R U R' U' R U' R'" data-gen="&lt;RU&gt;" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+    <!-- Row: Diag -->
+    <tr>
+      <th scope="row" data-case="diag">
+        <img src=".\u-coll-diag.png" alt="Diag" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="(U2) L' R U R' U R U R' U2 L R U' R'" data-gen="&lt;RUL&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R U' R' U' R U R D R' U R D' R2" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') f U R U' R' f' r' U r2 U' r2' U' r2 U r'" data-gen="&lt;RrUF&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R D' R2 U2 R U' R' U' R2 D R'" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R D' R2 U R U R' U2 R2 D R'" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R U2' R2' F R F' U' S' R U' R' S" data-gen="&lt;RUFS&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R' D' R U' R' D R2 U2 R' U R U R'" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R' U' F R' F' R2 S' R' U R S" data-gen="&lt;RUFS&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="F U R U2 R' U R U R' U R U2 R' U R U R' F'" data-gen="&lt;RUF&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') r U' r2 U r2 U r2 U' r f R U R' U' f'" data-gen="&lt;RrUf&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' F' U' F U F R S R' F' R S'" data-gen="&lt;RUFS&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="S' R' U' R S R' U F' U' F U R" data-gen="&lt;RUFS&gt;" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+    <!-- Row: X -->
+    <tr>
+      <th scope="row" data-case="x">
+        <img src=".\u-coll-x.png" alt="X" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="(U2) r U2 r' U2 L' U2 r U2 r' U2 L" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' D' U2 R' D R U2 R' D' R D R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R U' R2 F R U R U' R2 F' R U' F' U F" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U' R f R' U R U' R U R' U' f'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R U R' U R U' R' U2 R' D' R U2 R' D R2 U' R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R U' R' U' R U' R' U R' D' R U R' D R2 U R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U2 R U R D R' U' R D' R' U R' U R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R U R' U' R' F2 r2 U' R' U' R U R r2 F2" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R U R' U R U R' U2 R U' R2 D' R U' R' D R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U' R F U' R' U' R U F' U R' U R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R F U' R' U' R U2 R' U' R F' R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) S R U2 R' F R' F' R U2 R' F R f'" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+    <!-- Row: Bars -->
+    <tr>
+      <th scope="row" data-case="bars">
+        <img src=".\u-coll-bars.png" alt="Bars" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="R' F R U' R' U' R U R' F' R U R' U' R' F R F' R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R2 F R U R U' R' F' R U' R2' D' R U R' D R2" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R F U R' U' R F' R' U' R' F R f' R U R' S" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') F' U' r' F2 r U' r' F' r2 U R' U' r' F R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') F2 R U' R' U' R U R' F' R U R' U' R' F R F2" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="S R' F2 R S' R' U' F U r U2' R U' r' F" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="r2 F2 r U2 r U' L' U R' U R U' L" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' U' r y R' F R2 f' U S R' F R2 f'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R' U' R F R2' D' R U R' D R2 U' F'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="S' R' F' U2 F R U2 R' F R' F' R2 S" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') r U R' U' r' F R U R' U' R F' R' U R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') r U R' U' r' F R2 U' R' U' R U2 R' U' F'" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+    <!-- Row: Slash -->
+    <tr>
+      <th scope="row" data-case="slash">
+        <img src=".\u-coll-slash.png" alt="Slash" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="(U2) R2 D R' U2 R D' R' U2 R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="r U R' U R' D' R U R' D R U r' F R F'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R' D' r U2 r' D R U2 R U' R' U' R U' R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="back sexy front sexy R' U F R horrid F' (harrison notation)" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R U R' U R U' R' U F' R U2 R' U2 R' F R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R U R' U R U' R' U' R' F R U R U' R' F'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R2 D r' U2 r D' R' U2 R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U2) R' U' F' R U R2 U' R' F R U R2 U2 R' U2 R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R F2 U' R2 U' R U2 R' U' R U' R U F2 R'" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R U R' U R U' R' U R U' R' U' L' U R U' R' L" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R U' R' U' R U2 R' U' R' D' R U2 R' D R" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R U2 R D R' U2 R D' R' U2 R' U' R U' R'" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+    <!-- Row: Backslash -->
+    <tr>
+      <th scope="row" data-case="backslash">
+        <img src=".\u-coll-backslash.png" alt="Backslash" border=0 height=80 width=80>
+      </th>
+      <td><button class="editbtn" data-alg="R2 D' r U2 r' D R U2 R" data-gen="&lt;RrUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="F U R U' R D R' U' R D' R2 U R U R' F'" data-gen="&lt;RUFD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R' U2 R' D' R U2 R' D R U2 R U R' U R" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') R2' F' R U2 R U2 R' F U' R U R' U' R" data-gen="&lt;RUF&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="r B r' U r B2 r2 F R F' r U R'" data-gen="&lt;RrUBF&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' F R U' R' F R U R' F R U' R' F2 R F U F'" data-gen="&lt;RUFy&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U) R2 D' R U' R' D R2 U' R' U2 R" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R D r' U2 r D' R' U2 R' U R U R' U R" data-gen="&lt;RrUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R' F' r U2 R' D R U' R' D' R2 U' r' F" data-gen="&lt;RrUDF&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="(U') L U2 R' F R U' R U R' U F' R U2 R' L'" data-gen="&lt;RUFL&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R2 D' R U2 R' D R U2 R" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+      <td><button class="editbtn" data-alg="R D R' U2 R D' R' U R' U R U' R' U' R U R' U' R" data-gen="&lt;RUD&gt;" style="height:80px;width:80px;">👀</button></td>
+    </tr>
+
+  </table>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+  <script src="https://adiwastu.github.io/zbll-array/roofpig_and_three.min.js"></script>
+  <script>
+
+    /* ---------- UTILITY: placeholder factory function ----------
+       A factory function creates and returns a new DOM element.
+       We centralise the placeholder design here so if you want
+       to change the look, you only edit one place. */
+    function createPlaceholder(filename) {
+      var wrapper = document.createElement("div");
+      wrapper.className = "img-placeholder";
+      wrapper.title = "Missing file: " + filename;
+
+      var icon = document.createElement("span");
+      icon.className = "placeholder-icon";
+      icon.textContent = "⚠️";
+
+      var label = document.createElement("span");
+      label.className = "placeholder-label";
+      label.textContent = filename;
+
+      wrapper.appendChild(icon);
+      wrapper.appendChild(label);
+      return wrapper;
+    }
+
+    /* ---------- UTILITY: safe image loader ----------
+       Attaches an onerror handler BEFORE setting src so the
+       browser fires the event even if the file is missing on
+       first load. Replaces the broken <img> with a placeholder
+       div in the DOM. This is called "graceful degradation". */
+    function attachErrorHandler(img) {
+      img.addEventListener("error", function() {
+        var filename = img.src.split("/").pop().split("\\").pop();
+        var placeholder = createPlaceholder(filename);
+        img.parentNode.replaceChild(placeholder, img);
       });
-    </script>
-    <style>
-      .active {
-        background-color: rgb(0, 0, 255);
-      }
+    }
 
-      body {
-        font-family: Arial, Helvetica, sans-serif, sans-serif;
-      }
-      select {
-  height: 30px;
-
-}
+    /* Attach error handlers to all images already in the page on load.
+       querySelectorAll returns a NodeList — we spread it into an Array
+       so we can use forEach, which NodeLists don't always support. */
+    Array.from(document.querySelectorAll("img")).forEach(attachErrorHandler);
 
 
-    </style>
-  </body>
+    /* ---------- SET SWAPPER ----------
+       When the user picks a different set, we find every row-header <th>
+       that has a data-case attribute and rebuild the image src using the
+       selected set prefix + the case name.
+
+       This is the "data attribute as single source of truth" pattern:
+       the HTML stores the *identity* (e.g. "2gll"), the JS derives the
+       *filename* dynamically, so the two never drift out of sync. */
+    var setSelector = document.getElementById("set-selector");
+
+    function swapSets() {
+      var selectedSet = setSelector.value;   // already lowercase from the <option> values
+
+      /* CSS attribute selector: [data-case] matches any element
+         that has a data-case attribute, regardless of its value. */
+      var rowHeaders = document.querySelectorAll("th[data-case]");
+
+      rowHeaders.forEach(function(th) {
+        var caseName   = th.getAttribute("data-case");
+        var newSrc     = "./" + selectedSet + "-coll-" + caseName + ".png";
+        var newAlt     = selectedSet.toUpperCase() + " " + caseName;
+
+        /* Check if the slot currently holds an <img> or a placeholder div.
+           This is a "defensive check" — we handle both states so switching
+           sets twice in a row doesn't crash. */
+        var existing = th.querySelector("img, .img-placeholder");
+
+        if (existing && existing.tagName === "IMG") {
+          existing.src = newSrc;
+          existing.alt = newAlt;
+          /* Re-attach the error handler every time src changes,
+             because reassigning src fires the load cycle again. */
+          attachErrorHandler(existing);
+        } else {
+          /* Replace placeholder with a fresh <img>.
+             If the new file also missing, onerror will swap it back. */
+          var newImg = document.createElement("img");
+          newImg.alt    = newAlt;
+          newImg.border = "0";
+          newImg.height = 80;
+          newImg.width  = 80;
+          attachErrorHandler(newImg);   /* attach BEFORE setting src */
+          newImg.src = newSrc;
+          if (existing) {
+            th.replaceChild(newImg, existing);
+          } else {
+            th.appendChild(newImg);
+          }
+        }
+      });
+    }
+
+    setSelector.addEventListener("change", swapSets);
+
+
+    /* ---------- ALGORITHM DISPLAY ---------- */
+    var audio      = document.getElementById("chess_audio");
+    var buttons    = document.getElementsByClassName("editbtn");
+    var textDisplay = document.createElement("div");
+
+    textDisplay.style.cssText = "font-size:30px; font-weight:bold; position:fixed; bottom:16px; left:16px; color:blue; background:rgba(255,255,255,0.92); padding:8px 12px; border-radius:6px; border:1px solid #ccc; max-width:90vw;";
+    textDisplay.id = "text-display";
+    textDisplay.innerHTML = "Click 👀 to see the algorithm.";
+    document.body.appendChild(textDisplay);
+
+    Array.from(buttons).forEach(function(btn) {
+      btn.addEventListener("click", function() {
+        audio.play();
+        textDisplay.innerHTML = this.getAttribute("data-alg");
+
+        Array.from(buttons).forEach(function(b) { b.classList.remove("active"); });
+        this.classList.add("active");
+      });
+    });
+
+
+    /* ---------- COPY BUTTON ---------- */
+    var copyButton    = document.getElementById("copy-button");
+    var copiedMessage = document.getElementById("copied-message");
+
+    copyButton.addEventListener("click", function() {
+      var text     = textDisplay.innerHTML;
+      var textarea = document.createElement("textarea");
+      textarea.value = text;
+      document.body.appendChild(textarea);
+      textarea.select();
+      document.execCommand("copy");
+      document.body.removeChild(textarea);
+
+      copiedMessage.style.display = "block";
+      setTimeout(function() { copiedMessage.style.display = "none"; }, 1500);
+    });
+
+  </script>
+</body>
 </html>
