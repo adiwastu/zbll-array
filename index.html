@@ -2,7 +2,7 @@
 <html>
 <head>
   <meta charset="UTF-8">
-  <title>COLL Trainer</title>
+  <title>Hotland's ZBLL Array</title>
   <style>
     body {
       font-family: Arial, Helvetica, sans-serif;
@@ -208,10 +208,137 @@
   <script src="https://adiwastu.github.io/zbll-array/roofpig_and_three.min.js"></script>
   <script>
 
-    /* ---------- UTILITY: placeholder factory function ----------
+    /* ============================================================
+       DISPATCH TABLE (also called a "lookup table")
+       Instead of a giant if/else checking which set is active,
+       we store every set's algs in a plain object keyed by set
+       name. Then we just do ALGS[selectedSet][row][col] to get
+       the right alg instantly. Adding a new set = adding one
+       object. No if/else needed ever.
+
+       Structure: ALGS[setName][rowName][colIndex]
+       rowName matches the data-case attribute on each <th>.
+       colIndex is 0-11, matching the 12 BH columns left→right.
+
+       The placeholder string "R U R' U' (update this)" is what
+       shows for any cell that hasn't been filled in yet.
+    ============================================================ */
+    var PLACEHOLDER = "R U R' U' (update this)";
+
+    /* Helper: fills an entire row with the placeholder.
+       This uses Array.from({length: N}, fn) — a pattern for
+       generating an array of N items using a mapping function. */
+    function placeholderRow() {
+      return Array.from({ length: 12 }, function() { return PLACEHOLDER; });
+    }
+
+    var ALGS = {
+      u: {
+        "2gll": [
+          "R U R' U R U' R' U' R U' R' U2 R U' R' U2 R U R'",
+          "R U R' U' R' U R U R U' R' U R' U R U2 R' U' R",
+          "R' U' R U' R' U2 R2 U R' U R U2 R'",
+          "(U2) R U R' U R U2 R2 U' R U' R' U2 R",
+          "(U') R U R' U' R U' R' U2 R U' R' U2 R U R'",
+          "(U2) R U R' U R U2 R' U R U2 R' U' R U' R'",
+          "(U) R' U2 R U R' U R U R' U' R U' R' U2 R",
+          "(U) R U2 R2 U' R2 U' R' U R' U' R U R' U R",
+          "(U) R U2 R' U' R U' R' U' R U R' U R U2 R'",
+          "R' U' R U' R U2 R2 U' R2 U' R2 U R",
+          "(U2) R U R' U R' U2 R2 U R2 U R2 U' R'",
+          "(U) R' U2 R2 U R2 U R U' R U R' U' R U' R'"
+        ],
+        "diag": [
+          "(U2) L' R U R' U R U R' U2 L R U' R'",
+          "R U' R' U' R U R D R' U R D' R2",
+          "(U') f U R U' R' f' r' U r2 U' r2' U' r2 U r'",
+          "R D' R2 U2 R U' R' U' R2 D R'",
+          "(U2) R D' R2 U R U R' U2 R2 D R'",
+          "(U') R U2' R2' F R F' U' S' R U' R' S",
+          "(U') R' D' R U' R' D R2 U2 R' U R U R'",
+          "(U') R' U' F R' F' R2 S' R' U R S",
+          "F U R U2 R' U R U R' U R U2 R' U R U R' F'",
+          "(U') r U' r2 U r2 U r2 U' r f R U R' U' f'",
+          "R' F' U' F U F R S R' F' R S'",
+          "S' R' U' R S R' U F' U' F U R"
+        ],
+        "x": [
+          "(U2) r U2 r' U2 L' U2 r U2 r' U2 L",
+          "R' D' U2 R' D R U2 R' D' R D R",
+          "(U2) R U' R2 F R U R U' R2 F' R U' F' U F",
+          "R' U' R f R' U R U' R U R' U' f'",
+          "R U R' U R U' R' U2 R' D' R U2 R' D R2 U' R'",
+          "(U') R U' R' U' R U' R' U R' D' R U R' D R2 U R'",
+          "R' U2 R U R D R' U' R D' R' U R' U R",
+          "R U R' U' R' F2 r2 U' R' U' R U R r2 F2",
+          "(U2) R U R' U R U R' U2 R U' R2 D' R U' R' D R",
+          "R' U' R F U' R' U' R U F' U R' U R",
+          "R F U' R' U' R U2 R' U' R F' R'",
+          "(U2) S R U2 R' F R' F' R U2 R' F R f'"
+        ],
+        "bars": [
+          "R' F R U' R' U' R U R' F' R U R' U' R' F R F' R",
+          "R2 F R U R U' R' F' R U' R2' D' R U R' D R2",
+          "R F U R' U' R F' R' U' R' F R f' R U R' S",
+          "(U') F' U' r' F2 r U' r' F' r2 U R' U' r' F R",
+          "(U') F2 R U' R' U' R U R' F' R U R' U' R' F R F2",
+          "S R' F2 R S' R' U' F U r U2' R U' r' F",
+          "r2 F2 r U2 r U' L' U R' U R U' L",
+          "z R D R2' U' R D' U R' D R2' U' R D' R U",
+          "(U') R' U' R F R2' D' R U R' D R2 U' F'",
+          "S' R' F' U2 F R U2 R' F R' F' R2 S",
+          "(U') r U R' U' r' F R U R' U' R F' R' U R",
+          "(U') r U R' U' r' F R2 U' R' U' R U2 R' U' F'"
+        ],
+        "slash": [
+          "(U2) R2 D R' U2 R D' R' U2 R'",
+          "r U R' U R' D' R U R' D R U r' F R F'",
+          "(U2) R' D' r U2 r' D R U2 R U' R' U' R U' R'",
+          "back sexy front sexy R' U F R horrid F' (harrison notation)",
+          "(U') R U R' U R U' R' U F' R U2 R' U2 R' F R",
+          "(U) R U R' U R U' R' U' R' F R U R U' R' F'",
+          "(U2) R2 D r' U2 r D' R' U2 R'",
+          "(U2) R' U' F' R U R2 U' R' F R U R2 U2 R' U2 R",
+          "R F2 U' R2 U' R U2 R' U' R U' R U F2 R'",
+          "(U) R U R' U R U' R' U R U' R' U' L' U R U' R' L",
+          "R U' R' U' R U2 R' U' R' D' R U2 R' D R",
+          "(U') R U2 R D R' U2 R D' R' U2 R' U' R U' R'"
+        ],
+        "backslash": [
+          "R2 D' r U2 r' D R U2 R",
+          "F U R U' R D R' U' R D' R2 U R U R' F'",
+          "(U') R' U2 R' D' R U2 R' D R U2 R U R' U R",
+          "(U') R2' F' R U2 R U2 R' F U' R U R' U' R",
+          "r B r' U r B2 r2 F R F' r U R'",
+          "R' F R U' R' F R U R' F R U' R' F2 R F U F'",
+          "(U) R2 D' R U' R' D R2 U' R' U2 R",
+          "R D r' U2 r D' R' U2 R' U R U R' U R",
+          "R' F' r U2 R' D R U' R' D' R2 U' r' F",
+          "(U') L U2 R' F R U' R U R' U F' R U2 R' L'",
+          "R2 D' R U2 R' D R U2 R",
+          "R D R' U2 R D' R' U R' U R U' R' U' R U R' U' R"
+        ]
+      },
+
+      /* T set: all placeholders until you fill them in */
+      t: {
+        "2gll":      placeholderRow(),
+        "diag":      placeholderRow(),
+        "x":         placeholderRow(),
+        "bars":      placeholderRow(),
+        "slash":     placeholderRow(),
+        "backslash": placeholderRow()
+      }
+
+      /* To add L, Pi, H, S, A: follow the same pattern.
+         Either fill real algs or use placeholderRow(). */
+    };
+
+
+    /* ============================================================
+       UTILITY: placeholder factory function
        A factory function creates and returns a new DOM element.
-       We centralise the placeholder design here so if you want
-       to change the look, you only edit one place. */
+    ============================================================ */
     function createPlaceholder(filename) {
       var wrapper = document.createElement("div");
       wrapper.className = "img-placeholder";
@@ -230,11 +357,10 @@
       return wrapper;
     }
 
-    /* ---------- UTILITY: safe image loader ----------
-       Attaches an onerror handler BEFORE setting src so the
-       browser fires the event even if the file is missing on
-       first load. Replaces the broken <img> with a placeholder
-       div in the DOM. This is called "graceful degradation". */
+    /* ============================================================
+       UTILITY: safe image loader (graceful degradation)
+       Attaches onerror BEFORE setting src.
+    ============================================================ */
     function attachErrorHandler(img) {
       img.addEventListener("error", function() {
         var filename = img.src.split("/").pop().split("\\").pop();
@@ -243,54 +369,36 @@
       });
     }
 
-    /* Attach error handlers to all images already in the page on load.
-       querySelectorAll returns a NodeList — we spread it into an Array
-       so we can use forEach, which NodeLists don't always support. */
     Array.from(document.querySelectorAll("img")).forEach(attachErrorHandler);
 
 
-    /* ---------- SET SWAPPER ----------
-       When the user picks a different set, we find every row-header <th>
-       that has a data-case attribute and rebuild the image src using the
-       selected set prefix + the case name.
-
-       This is the "data attribute as single source of truth" pattern:
-       the HTML stores the *identity* (e.g. "2gll"), the JS derives the
-       *filename* dynamically, so the two never drift out of sync. */
+    /* ============================================================
+       SET SWAPPER — images + algs
+    ============================================================ */
     var setSelector = document.getElementById("set-selector");
 
     function swapSets() {
-      var selectedSet = setSelector.value;   // already lowercase from the <option> values
+      var selectedSet = setSelector.value;
 
-      /* CSS attribute selector: [data-case] matches any element
-         that has a data-case attribute, regardless of its value. */
+      /* --- Swap row-header images --- */
       var rowHeaders = document.querySelectorAll("th[data-case]");
-
       rowHeaders.forEach(function(th) {
-        var caseName   = th.getAttribute("data-case");
-        var newSrc     = "./" + selectedSet + "-coll-" + caseName + ".png";
-        var newAlt     = selectedSet.toUpperCase() + " " + caseName;
-
-        /* Check if the slot currently holds an <img> or a placeholder div.
-           This is a "defensive check" — we handle both states so switching
-           sets twice in a row doesn't crash. */
+        var caseName = th.getAttribute("data-case");
+        var newSrc   = "./" + selectedSet + "-coll-" + caseName + ".png";
+        var newAlt   = selectedSet.toUpperCase() + " " + caseName;
         var existing = th.querySelector("img, .img-placeholder");
 
         if (existing && existing.tagName === "IMG") {
           existing.src = newSrc;
           existing.alt = newAlt;
-          /* Re-attach the error handler every time src changes,
-             because reassigning src fires the load cycle again. */
           attachErrorHandler(existing);
         } else {
-          /* Replace placeholder with a fresh <img>.
-             If the new file also missing, onerror will swap it back. */
-          var newImg = document.createElement("img");
+          var newImg    = document.createElement("img");
           newImg.alt    = newAlt;
           newImg.border = "0";
           newImg.height = 80;
           newImg.width  = 80;
-          attachErrorHandler(newImg);   /* attach BEFORE setting src */
+          attachErrorHandler(newImg);
           newImg.src = newSrc;
           if (existing) {
             th.replaceChild(newImg, existing);
@@ -299,14 +407,56 @@
           }
         }
       });
+
+      /* --- Swap button algs ---
+         We walk every data-case row, grab the matching alg array
+         from the dispatch table, then assign each alg to the
+         matching button by column index.
+
+         This uses the "parallel arrays" concept: the buttons in
+         a row and the algs array share the same index, so
+         buttons[0] always gets algs[0], buttons[1] gets algs[1],
+         etc. */
+      rowHeaders.forEach(function(th) {
+        var caseName  = th.getAttribute("data-case");
+        var setAlgs   = ALGS[selectedSet];
+
+        /* Fallback: if the whole set isn't in the table yet,
+           treat every cell as a placeholder. This is the
+           "null object pattern" — return a safe default
+           instead of crashing with undefined[caseName]. */
+        var rowAlgs = (setAlgs && setAlgs[caseName])
+          ? setAlgs[caseName]
+          : placeholderRow();
+
+        var row     = th.parentElement;          /* the <tr> */
+        var cells   = row.querySelectorAll("td");
+
+        cells.forEach(function(td, colIndex) {
+          var btn = td.querySelector(".editbtn");
+          if (btn) {
+            var alg = rowAlgs[colIndex] !== undefined
+              ? rowAlgs[colIndex]
+              : PLACEHOLDER;
+            btn.setAttribute("data-alg", alg);
+          }
+        });
+      });
+
+      /* Clear the display so stale algs from the old set
+         don't linger after switching. */
+      textDisplay.innerHTML = "Click 👀 to see the algorithm.";
+      Array.from(buttons).forEach(function(b) { b.classList.remove("active"); });
     }
 
     setSelector.addEventListener("change", swapSets);
 
 
-    /* ---------- ALGORITHM DISPLAY ---------- */
-    var audio      = document.getElementById("chess_audio");
-    var buttons    = document.getElementsByClassName("editbtn");
+    /* ============================================================
+       ALGORITHM DISPLAY
+    ============================================================ */
+    var audio       = document.getElementById("chess_audio");
+    var buttons     = document.getElementsByClassName("editbtn");
     var textDisplay = document.createElement("div");
 
     textDisplay.style.cssText = "font-size:30px; font-weight:bold; position:fixed; bottom:16px; left:16px; color:blue; background:rgba(255,255,255,0.92); padding:8px 12px; border-radius:6px; border:1px solid #ccc; max-width:90vw;";
@@ -325,7 +475,9 @@
     });
 
 
-    /* ---------- COPY BUTTON ---------- */
+    /* ============================================================
+       COPY BUTTON
+    ============================================================ */
     var copyButton    = document.getElementById("copy-button");
     var copiedMessage = document.getElementById("copied-message");
 
